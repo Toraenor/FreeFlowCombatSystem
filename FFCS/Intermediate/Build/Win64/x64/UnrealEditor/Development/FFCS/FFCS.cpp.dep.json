@@ -1,0 +1,14 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "d:\\personalproject\\ffcs\\source\\ffcs\\ffcs.cpp",
+        "ProvidedModule": "",
+        "PCH": "d:\\personalproject\\ffcs\\intermediate\\build\\win64\\x64\\ffcseditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.h.pch",
+        "Includes": [
+            "d:\\personalproject\\ffcs\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\ffcs\\definitions.ffcs.h",
+            "d:\\personalproject\\ffcs\\source\\ffcs\\ffcs.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

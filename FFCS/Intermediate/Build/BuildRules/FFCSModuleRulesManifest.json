@@ -1,0 +1,8 @@
+{
+	"SourceFiles": [
+		"D:\\PersonalProject\\FFCS\\Source\\FFCS\\FFCS.Build.cs",
+		"D:\\PersonalProject\\FFCS\\Source\\FFCS.Target.cs",
+		"D:\\PersonalProject\\FFCS\\Source\\FFCSEditor.Target.cs"
+	],
+	"EngineVersion": "5.4.4"
+}
