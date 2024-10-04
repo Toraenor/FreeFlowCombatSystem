@@ -1,0 +1,12 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-FFCS.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"D:\PersonalProject\FFCS\Intermediate\Build\Win64\x64\FFCSEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h.obj"
+"D:\PersonalProject\FFCS\Intermediate\Build\Win64\x64\UnrealEditor\Development\FFCS\FFCS.cpp.obj"
+"D:\PersonalProject\FFCS\Intermediate\Build\Win64\x64\UnrealEditor\Development\FFCS\Default.rc2.res"
+/OUT:"D:\PersonalProject\FFCS\Intermediate\Build\Win64\x64\UnrealEditor\Development\FFCS\UnrealEditor-FFCS.lib"
