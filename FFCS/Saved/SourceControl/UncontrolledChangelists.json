@@ -5,6 +5,9 @@
 			"guid": "00000000000000000000000000000000",
 			"description": "Default Uncontrolled Changelist",
 			"files": [
+				"D:/PersonalProject/FFCS/Content/StarterContent/Architecture/Floor_400x400.uasset",
+				"D:/PersonalProject/FFCS/Content/FFCS/Blueprints/BP_Player.uasset",
+				"D:/PersonalProject/FFCS/Content/FFCS/Blueprints/BP_ThirdPersonGameMode.uasset",
 				"C:/Users/UTILISATEUR/Documents/Unreal Projects/PersonalProject/FFCS/Content/FFCS/Blueprints/BP_ThirdPersonGameMode.uasset",
 				"C:/Users/UTILISATEUR/Documents/Unreal Projects/PersonalProject/FFCS/Content/FFCS/Input/Actions/IA_Jump.uasset",
 				"C:/Users/UTILISATEUR/Documents/Unreal Projects/PersonalProject/FFCS/Content/FFCS/Input/Actions/IA_Look.uasset",
@@ -126,7 +129,6 @@
 				"C:/Users/UTILISATEUR/Documents/Unreal Projects/PersonalProject/FFCS/Content/ThirdPerson/Maps/ThirdPersonMap.umap",
 				"C:/Users/UTILISATEUR/Documents/Unreal Projects/PersonalProject/FFCS/Content/FFCS/Blueprints/BP_Enemy2.uasset",
 				"C:/Users/UTILISATEUR/Documents/Unreal Projects/PersonalProject/FFCS/Content/FFCS/Blueprints/BP_Player2.uasset",
-				"D:/PersonalProject/FFCS/Content/StarterContent/Architecture/Floor_400x400.uasset",
 				"D:/PersonalProject/FFCS/Content/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.uasset",
 				"D:/PersonalProject/FFCS/Content/ThirdPerson/Input/IMC_Default.uasset"
 			]
