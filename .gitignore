@@ -72,3 +72,6 @@ Plugins/**/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+/FFCS/Saved
+/FFCS/Saved
+FFCS/Saved/Telemetry/Telemetry.json
