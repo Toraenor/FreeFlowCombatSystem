@@ -33,6 +33,18 @@
     <Filter Include="Source\FFCS">
       <UniqueIdentifier>{731B3347-85D1-3AEB-8DFD-381459F97D95}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\FFCS\CharacterBase.cpp">
+      <Filter>Source\FFCS</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\FFCS\CharacterBase.h">
+      <Filter>Source\FFCS</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\FFCS\EnemyBase.cpp">
+      <Filter>Source\FFCS</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\FFCS\EnemyBase.h">
+      <Filter>Source\FFCS</Filter>
+    </ClInclude>
     <None Include="..\..\Source\FFCS\FFCS.Build.cs">
       <Filter>Source\FFCS</Filter>
     </None>
@@ -40,6 +52,12 @@
       <Filter>Source\FFCS</Filter>
     </ClCompile>
     <ClInclude Include="..\..\Source\FFCS\FFCS.h">
+      <Filter>Source\FFCS</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\FFCS\PlayerFFCS.cpp">
+      <Filter>Source\FFCS</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\FFCS\PlayerFFCS.h">
       <Filter>Source\FFCS</Filter>
     </ClInclude>
   </ItemGroup>
