@@ -28,8 +28,12 @@ public:
 	float FindBestInputDotProductWithEnemy(const AActor* Enemy) const;
 	UFUNCTION(BlueprintPure)
 	FVector GetEnemyToPlayerVec(const AActor* Enemy) const;
-	UFUNCTION(BlueprintCallable)
-	void FindBestEnemyTest(TArray<const AActor*>& Enemies);
+	// UFUNCTION(BlueprintCallable)
+	// void FindBestEnemyTest(TArray<const AActor*>& Enemies);
+	UFUNCTION(BlueprintPure)
+	void GetEnemyTeleportLocationRotation(const AActor* Enemy, const float Offset, FVector& OutLocation, FRotator& OutRotation) const;
+	UFUNCTION(BlueprintPure)
+	float ScaleValueToCombo(const float ValueToScale, const bool Multiply) const;
 
 	FVector GetPlayerToEnemyVec(const AActor* Enemy) const;
 
@@ -38,4 +42,5 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	class USpringArmComponent* SpringArm;
 	FVector2d InputActionMoveValue;
+	int CurrentCombo2 = 0;
 };

@@ -6,7 +6,6 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "InputAction.h"
 #include "Kismet/KismetMathLibrary.h"
 
 APlayerFFCS::APlayerFFCS()
@@ -34,12 +33,12 @@ float APlayerFFCS::GetMouseDotProduct(const AActor* Enemy) const
 
 float APlayerFFCS::GetKeyboardDotProduct(const AActor* Enemy) const
 {
-	const FRotator Rotation = FRotator(0.f, GetControlRotation().Yaw ,0.f);
+	const FRotator Rotation = FRotator(0.f, GetControlRotation().Yaw, 0.f);
 	const FVector RightVec = UKismetMathLibrary::Quat_RotateVector(Rotation.Quaternion(), FVector::RightVector);
 	const FVector ForwardVec = UKismetMathLibrary::Quat_RotateVector(Rotation.Quaternion(), FVector::ForwardVector);
 	FVector Vec = ForwardVec * InputActionMoveValue.Y + RightVec * InputActionMoveValue.X;
 	Vec.Normalize();
-	
+
 	return FVector::DotProduct(Vec, GetPlayerToEnemyVec(Enemy));
 }
 
@@ -60,6 +59,23 @@ FVector APlayerFFCS::GetEnemyToPlayerVec(const AActor* Enemy) const
 	return EnemyToPlayerVec;
 }
 
+void APlayerFFCS::GetEnemyTeleportLocationRotation(const AActor* Enemy, const float Offset, FVector& OutLocation,
+                                                   FRotator& OutRotation) const
+{
+	OutLocation = GetEnemyToPlayerVec(Enemy) * Offset + Enemy->GetActorLocation();
+	OutRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Enemy->GetActorLocation());
+}
+
+float APlayerFFCS::ScaleValueToCombo(const float ValueToScale, const bool Multiply) const
+{
+	const float ComboPercent = CurrentCombo2 / 10.f + 1;
+	if (Multiply)
+	{
+		return ValueToScale * ComboPercent;
+	}
+	return ValueToScale / ComboPercent;
+}
+
 FVector APlayerFFCS::GetPlayerToEnemyVec(const AActor* Enemy) const
 {
 	FVector PlayerToEnemyVec = Enemy->GetActorLocation() - GetActorLocation();
@@ -67,11 +83,11 @@ FVector APlayerFFCS::GetPlayerToEnemyVec(const AActor* Enemy) const
 	return PlayerToEnemyVec;
 }
 
-void APlayerFFCS::FindBestEnemyTest(TArray<const AActor*>& Enemies)
-{
-	// float DotProduct = -1.f;
-	// for (auto Enemy : Enemies)
-	// {
-	// 	
-	// }
-}
+// void APlayerFFCS::FindBestEnemyTest(TArray<const AActor*>& Enemies)
+// {
+// 	// float DotProduct = -1.f;
+// 	// for (auto Enemy : Enemies)
+// 	// {
+// 	// 	
+// 	// }
+// }
