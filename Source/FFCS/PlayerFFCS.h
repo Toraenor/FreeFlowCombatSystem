@@ -26,14 +26,17 @@ public:
 	float FindBestInputDotProductWithEnemy(const AActor* Enemy) const;
 	UFUNCTION(BlueprintPure)
 	FVector GetEnemyToPlayerVec(const AActor* Enemy) const;
-	// UFUNCTION(BlueprintCallable)
-	// void FindBestEnemyTest(TArray<const AActor*>& Enemies);
+	UFUNCTION(BlueprintCallable)
+	void FindBestEnemyTest(TArray<AActor*> Enemies);
 	UFUNCTION(BlueprintPure)
 	void GetEnemyTeleportLocationRotation(const AActor* Enemy, const float Offset, FVector& OutLocation, FRotator& OutRotation) const;
 	UFUNCTION(BlueprintPure)
 	float ScaleValueToCombo(const float ValueToScale, const bool Multiply) const;
 
 	FVector GetPlayerToEnemyVec(const AActor* Enemy) const;
+
+	UFUNCTION(BlueprintCallable)
+	bool CheckCollisionBeforeTeleport(const AActor* Enemy, FHitResult& OutHit);
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UCameraComponent> CameraComp;

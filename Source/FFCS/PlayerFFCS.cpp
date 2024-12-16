@@ -3,12 +3,17 @@
 
 #include "PlayerFFCS.h"
 
+#include "DebugMode.h"
+#include "EnemyComp.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/LocalPlayer.h"
 #include "EnhancedInputSubsystems.h"
+
+// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
+#define ECC_FreeFlow ECollisionChannel::ECC_GameTraceChannel1
 
 APlayerFFCS::APlayerFFCS()
 {
@@ -59,16 +64,18 @@ float APlayerFFCS::GetKeyboardDotProduct(const AActor* Enemy, const FVector2D& M
 
 float APlayerFFCS::FindBestInputDotProductWithEnemy(const AActor* Enemy) const
 {
-	if (!IsValid(Enemy) || !IsValid(IA_Move) || !IsValid(GetWorld()) || !IsValid(GetWorld()->GetFirstPlayerController()) || !IsValid(
-		GetWorld()->GetFirstPlayerController()->GetLocalPlayer()))
+	if (!IsValid(Enemy) || !IsValid(IA_Move) || !IsValid(GetWorld()) || !IsValid(GetWorld()->GetFirstPlayerController())
+		|| !IsValid(
+			GetWorld()->GetFirstPlayerController()->GetLocalPlayer()))
 		return -1.f;
-	
+
 	const UEnhancedInputLocalPlayerSubsystem* InputSubsystem =
-	ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetWorld()->GetFirstPlayerController()->GetLocalPlayer());
+		ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(
+			GetWorld()->GetFirstPlayerController()->GetLocalPlayer());
 
 	if (!IsValid(InputSubsystem))
 		return -1.f;
-	
+
 	const FInputActionValue InputValue = InputSubsystem->GetPlayerInput()->GetActionValue(IA_Move);
 
 	if (const FVector2D MoveValue = InputValue.Get<FVector2D>(); MoveValue.Length() != 0.f)
@@ -110,11 +117,67 @@ FVector APlayerFFCS::GetPlayerToEnemyVec(const AActor* Enemy) const
 	return PlayerToEnemyVec;
 }
 
-// void APlayerFFCS::FindBestEnemyTest(TArray<const AActor*>& Enemies)
-// {
-// 	// float DotProduct = -1.f;
-// 	// for (auto Enemy : Enemies)
-// 	// {
-// 	// 	
-// 	// }
-// }
+bool APlayerFFCS::CheckCollisionBeforeTeleport(const AActor* Enemy, FHitResult& OutHit)
+{
+	if (!IsValid(GetWorld()) || !IsValid(GetWorld()->GetFirstPlayerController()))
+		return false;
+
+	bool DrawDebug = false;
+
+	if (GetWorld()->GetFirstPlayerController()->Implements<UDebugMode>())
+	{
+		DrawDebug = IDebugMode::Execute_GetDebugMode(GetWorld()->GetFirstPlayerController());
+	}
+
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(this);
+	CollisionParams.AddIgnoredActor(Enemy);
+
+	const bool IsHit = GetWorld()->SweepSingleByChannel(OutHit, GetActorLocation(), Enemy->GetActorLocation(),
+	                                                    FQuat::Identity,
+	                                                    ECC_FreeFlow,
+	                                                    FCollisionShape::MakeSphere(
+		                                                    GetCapsuleComponent()->GetScaledCapsuleRadius() / 2.f),
+	                                                    CollisionParams);
+	if (DrawDebug)
+	{
+		if (IsHit)
+		{
+			// Draw a red sphere at the hit location (the point where the sweep collided)
+			DrawDebugSphere(GetWorld(), OutHit.ImpactPoint, GetCapsuleComponent()->GetScaledCapsuleRadius() / 2.f, 12,
+							FColor::Red, false, 2.0f);
+
+			// Optionally, draw a debug line from start to hit location
+			DrawDebugLine(GetWorld(), GetActorLocation(), OutHit.ImpactPoint, FColor::Red, false, 2.0f);
+		}
+		else
+		{
+			// No hit: draw a green line from start to end
+			DrawDebugLine(GetWorld(), GetActorLocation(), Enemy->GetActorLocation(), FColor::Green, false, 2.0f);
+		}	
+	}
+
+	return IsHit;
+}
+
+void APlayerFFCS::FindBestEnemyTest(TArray<AActor*> Enemies)
+{
+	// float DotProduct = -1.f;
+	// for (auto Enemy : Enemies)
+	// {
+	// 	FHitResult HitResult;
+	// 	UEnemyComp* EnemyComp = Enemy->GetComponentByClass<UEnemyComp>()
+	// 	if (!EnemyComp || !EnemyComp->Targetable)
+	// 		continue;
+	// 	
+	// 	bool IsHit = CheckCollisionBeforeTeleport(Enemy, HitResult);
+	// 	if (IsHit)
+	// 	{
+	// 		
+	// 	}
+	// 	else
+	// 	{
+	// 		
+	// 	}
+	// }
+}
