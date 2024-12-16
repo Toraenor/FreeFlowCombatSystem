@@ -7,6 +7,8 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Engine/LocalPlayer.h"
+#include "EnhancedInputSubsystems.h"
 
 APlayerFFCS::APlayerFFCS()
 {
@@ -19,34 +21,59 @@ APlayerFFCS::APlayerFFCS()
 	SpringArm->bUsePawnControlRotation = true;
 }
 
-void APlayerFFCS::RetrieveIAMoveValuesInCpp(const float ValueX, const float ValueY)
-{
-	InputActionMoveValue.X = ValueX;
-	InputActionMoveValue.Y = ValueY;
-}
-
 float APlayerFFCS::GetMouseDotProduct(const AActor* Enemy) const
 {
+	if (!IsValid(Enemy))
+		return -1.f;
+
 	CameraComp->GetForwardVector().Normalize();
 	return FVector::DotProduct(GetPlayerToEnemyVec(Enemy), CameraComp->GetForwardVector());
 }
 
-float APlayerFFCS::GetKeyboardDotProduct(const AActor* Enemy) const
+float APlayerFFCS::GetKeyboardDotProduct(const AActor* Enemy, const FVector2D& MoveValue) const
 {
+	if (!IsValid(Enemy) || !IsValid(IA_Move))
+		return -1.f;
+
 	const FRotator Rotation = FRotator(0.f, GetControlRotation().Yaw, 0.f);
 	const FVector RightVec = UKismetMathLibrary::Quat_RotateVector(Rotation.Quaternion(), FVector::RightVector);
 	const FVector ForwardVec = UKismetMathLibrary::Quat_RotateVector(Rotation.Quaternion(), FVector::ForwardVector);
-	FVector Vec = ForwardVec * InputActionMoveValue.Y + RightVec * InputActionMoveValue.X;
-	Vec.Normalize();
+	FVector Vec = ForwardVec * MoveValue.Y + RightVec * MoveValue.X;
 
-	return FVector::DotProduct(Vec, GetPlayerToEnemyVec(Enemy));
+	if (!Vec.IsNearlyZero())
+	{
+		Vec.Normalize();
+	}
+	else
+	{
+		return -1.f;
+	}
+
+	if (const FVector PlayerToEnemy = GetPlayerToEnemyVec(Enemy); !PlayerToEnemy.IsNearlyZero())
+	{
+		return FVector::DotProduct(Vec, PlayerToEnemy);
+	}
+
+	return -1.f;
 }
 
 float APlayerFFCS::FindBestInputDotProductWithEnemy(const AActor* Enemy) const
 {
-	if (InputActionMoveValue.Length() != 0.f)
+	if (!IsValid(Enemy) || !IsValid(IA_Move) || !IsValid(GetWorld()) || !IsValid(GetWorld()->GetFirstPlayerController()) || !IsValid(
+		GetWorld()->GetFirstPlayerController()->GetLocalPlayer()))
+		return -1.f;
+	
+	const UEnhancedInputLocalPlayerSubsystem* InputSubsystem =
+	ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetWorld()->GetFirstPlayerController()->GetLocalPlayer());
+
+	if (!IsValid(InputSubsystem))
+		return -1.f;
+	
+	const FInputActionValue InputValue = InputSubsystem->GetPlayerInput()->GetActionValue(IA_Move);
+
+	if (const FVector2D MoveValue = InputValue.Get<FVector2D>(); MoveValue.Length() != 0.f)
 	{
-		return GetKeyboardDotProduct(Enemy);
+		return GetKeyboardDotProduct(Enemy, MoveValue);
 	}
 
 	return GetMouseDotProduct(Enemy);

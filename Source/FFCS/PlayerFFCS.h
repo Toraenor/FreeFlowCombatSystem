@@ -14,16 +14,14 @@ UCLASS()
 class FFCS_API APlayerFFCS : public ACharacterBase
 {
 	GENERATED_BODY()
+
 public:
 	APlayerFFCS();
 
-	UFUNCTION(BlueprintCallable)
-	// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
-	void RetrieveIAMoveValuesInCpp(const float ValueX, const float ValueY);
 	UFUNCTION(BlueprintPure)
 	float GetMouseDotProduct(const AActor* Enemy) const;
 	UFUNCTION(BlueprintPure)
-	float GetKeyboardDotProduct(const AActor* Enemy) const;
+	float GetKeyboardDotProduct(const AActor* Enemy, const FVector2D& MoveValue) const;
 	UFUNCTION(BlueprintPure)
 	float FindBestInputDotProductWithEnemy(const AActor* Enemy) const;
 	UFUNCTION(BlueprintPure)
@@ -38,9 +36,13 @@ public:
 	FVector GetPlayerToEnemyVec(const AActor* Enemy) const;
 
 	UPROPERTY(EditDefaultsOnly)
-	class UCameraComponent* CameraComp;
+	TObjectPtr<class UCameraComponent> CameraComp;
 	UPROPERTY(EditDefaultsOnly)
-	class USpringArmComponent* SpringArm;
+	TObjectPtr<class USpringArmComponent> SpringArm;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
+	TObjectPtr<class UInputAction> IA_Move;
+
 	FVector2d InputActionMoveValue;
 	int CurrentCombo2 = 0;
 };
