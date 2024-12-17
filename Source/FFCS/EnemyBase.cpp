@@ -3,3 +3,9 @@
 
 #include "EnemyBase.h"
 
+#include "EnemyComp.h"
+
+AEnemyBase::AEnemyBase()
+{
+	EnemyComp = CreateDefaultSubobject<UEnemyComp>(TEXT("EnemyComp"));
+}

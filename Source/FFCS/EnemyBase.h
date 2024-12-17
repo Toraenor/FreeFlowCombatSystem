@@ -13,5 +13,10 @@ UCLASS()
 class FFCS_API AEnemyBase : public ACharacterBase
 {
 	GENERATED_BODY()
-	
+
+public:
+	AEnemyBase();
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<class UEnemyComp> EnemyComp;
 };

@@ -13,6 +13,33 @@ UFreeFlowCombatComponent::UFreeFlowCombatComponent()
 	// ...
 }
 
+void UFreeFlowCombatComponent::SetCurrentEnemy(AActor* Enemy)
+{
+	CurrentEnemy = Enemy;
+	//add logic
+}
+
+AActor* UFreeFlowCombatComponent::GetCurrentEnemy() const
+{
+	return CurrentEnemy;
+}
+
+// void UFreeFlowCombatComponent::SetTagToPlayer(const FGameplayTag& Tag)
+// {
+// }
+
+// const FGameplayTag& UFreeFlowCombatComponent::GetPlayerTag()
+// {
+// }
+
+void UFreeFlowCombatComponent::GetMontageBasedOnDistance()
+{
+}
+
+// FDataTableRowHandle UFreeFlowCombatComponent::GetRandomAnimation(const UDataTable* Table)
+// {
+// }
+
 
 // Called when the game starts
 // void UFreeFlowCombatComponent::BeginPlay()

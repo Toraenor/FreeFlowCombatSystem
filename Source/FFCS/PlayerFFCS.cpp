@@ -11,6 +11,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/LocalPlayer.h"
 #include "EnhancedInputSubsystems.h"
+#include "FreeFlowCombatComponent.h"
 
 // ReSharper disable once CppUE4CodingStandardNamingViolationWarning
 #define ECC_FreeFlow ECollisionChannel::ECC_GameTraceChannel1
@@ -24,6 +25,7 @@ APlayerFFCS::APlayerFFCS()
 	SpringArm->TargetArmLength = 500.f;
 	SpringArm->SetRelativeLocationAndRotation(FVector(0.f, 0.f, 70.f), FRotator(0.f, -17.f, 0.f));
 	SpringArm->bUsePawnControlRotation = true;
+	FFCC = CreateDefaultSubobject<UFreeFlowCombatComponent>(TEXT("FFCC"));
 }
 
 float APlayerFFCS::GetMouseDotProduct(const AActor* Enemy) const
@@ -145,7 +147,7 @@ bool APlayerFFCS::CheckCollisionBeforeTeleport(const AActor* Enemy, FHitResult& 
 		{
 			// Draw a red sphere at the hit location (the point where the sweep collided)
 			DrawDebugSphere(GetWorld(), OutHit.ImpactPoint, GetCapsuleComponent()->GetScaledCapsuleRadius() / 2.f, 12,
-							FColor::Red, false, 2.0f);
+			                FColor::Red, false, 2.0f);
 
 			// Optionally, draw a debug line from start to hit location
 			DrawDebugLine(GetWorld(), GetActorLocation(), OutHit.ImpactPoint, FColor::Red, false, 2.0f);
@@ -154,30 +156,44 @@ bool APlayerFFCS::CheckCollisionBeforeTeleport(const AActor* Enemy, FHitResult& 
 		{
 			// No hit: draw a green line from start to end
 			DrawDebugLine(GetWorld(), GetActorLocation(), Enemy->GetActorLocation(), FColor::Green, false, 2.0f);
-		}	
+		}
 	}
 
 	return IsHit;
 }
 
-void APlayerFFCS::FindBestEnemyTest(TArray<AActor*> Enemies)
+AActor* APlayerFFCS::FindBestEnemyTest(TArray<AActor*> Enemies)
 {
-	// float DotProduct = -1.f;
-	// for (auto Enemy : Enemies)
-	// {
-	// 	FHitResult HitResult;
-	// 	UEnemyComp* EnemyComp = Enemy->GetComponentByClass<UEnemyComp>()
-	// 	if (!EnemyComp || !EnemyComp->Targetable)
-	// 		continue;
-	// 	
-	// 	bool IsHit = CheckCollisionBeforeTeleport(Enemy, HitResult);
-	// 	if (IsHit)
-	// 	{
-	// 		
-	// 	}
-	// 	else
-	// 	{
-	// 		
-	// 	}
-	// }
+	float DotProduct = -1.f;
+	AActor* BestEnemy = nullptr;
+	
+	for (const auto Enemy : Enemies)
+	{
+		FHitResult HitResult;
+		if (const UEnemyComp* EnemyComp = Enemy->GetComponentByClass<UEnemyComp>();
+			!EnemyComp || !EnemyComp->Targetable)
+			continue;
+
+		const bool IsHit = CheckCollisionBeforeTeleport(Enemy, HitResult);
+		const float NewDotProduct = FindBestInputDotProductWithEnemy(Enemy);
+
+		//ensures that newDotProduct is greater than last one
+		if (NewDotProduct <= DotProduct)
+			continue;
+
+		//ensures that if we have a hit it isn't the same enemy
+		if (const AActor* CurrentEnemy = FFCC->GetCurrentEnemy();
+			IsHit && CurrentEnemy != Enemy)
+		{
+			BestEnemy = Enemy;
+			DotProduct = NewDotProduct;
+		}
+		else
+		{
+			BestEnemy = Enemy;
+			DotProduct = NewDotProduct;
+		}
+	}
+
+	return BestEnemy;
 }
