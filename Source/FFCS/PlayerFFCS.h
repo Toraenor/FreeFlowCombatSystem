@@ -27,7 +27,7 @@ public:
 	UFUNCTION(BlueprintPure)
 	FVector GetEnemyToPlayerVec(const AActor* Enemy) const;
 	UFUNCTION(BlueprintCallable)
-	void FindBestEnemyTest(TArray<AActor*> Enemies);
+	AActor* FindBestEnemyTest(TArray<AActor*> Enemies);
 	UFUNCTION(BlueprintPure)
 	void GetEnemyTeleportLocationRotation(const AActor* Enemy, const float Offset, FVector& OutLocation, FRotator& OutRotation) const;
 	UFUNCTION(BlueprintPure)
@@ -42,6 +42,9 @@ public:
 	TObjectPtr<class UCameraComponent> CameraComp;
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class USpringArmComponent> SpringArm;
+	UPROPERTY(EditDefaultsOnly)
+	// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
+	TObjectPtr<class UFreeFlowCombatComponent> FFCC;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
 	TObjectPtr<class UInputAction> IA_Move;
