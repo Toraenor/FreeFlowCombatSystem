@@ -17,26 +17,20 @@ class FFCS_API APlayerFFCS : public ACharacterBase
 
 public:
 	APlayerFFCS();
-
-	UFUNCTION(BlueprintPure)
+	
 	float GetMouseDotProduct(const AActor* Enemy) const;
-	UFUNCTION(BlueprintPure)
 	float GetKeyboardDotProduct(const AActor* Enemy, const FVector2D& MoveValue) const;
-	UFUNCTION(BlueprintPure)
 	float FindBestInputDotProductWithEnemy(const AActor* Enemy) const;
-	UFUNCTION(BlueprintPure)
 	FVector GetEnemyToPlayerVec(const AActor* Enemy) const;
+	FVector GetPlayerToEnemyVec(const AActor* Enemy) const;
+	bool CheckCollisionBeforeTeleport(const AActor* Enemy, FHitResult& OutHit) const;
+	
 	UFUNCTION(BlueprintCallable)
-	AActor* FindBestEnemyTest(TArray<AActor*> Enemies);
+	AActor* FindBestEnemy(TArray<AActor*> Enemies) const;
 	UFUNCTION(BlueprintPure)
 	void GetEnemyTeleportLocationRotation(const AActor* Enemy, const float Offset, FVector& OutLocation, FRotator& OutRotation) const;
 	UFUNCTION(BlueprintPure)
 	float ScaleValueToCombo(const float ValueToScale, const bool Multiply) const;
-
-	FVector GetPlayerToEnemyVec(const AActor* Enemy) const;
-
-	UFUNCTION(BlueprintCallable)
-	bool CheckCollisionBeforeTeleport(const AActor* Enemy, FHitResult& OutHit);
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UCameraComponent> CameraComp;

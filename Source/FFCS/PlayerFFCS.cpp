@@ -120,7 +120,7 @@ FVector APlayerFFCS::GetPlayerToEnemyVec(const AActor* Enemy) const
 	return PlayerToEnemyVec;
 }
 
-bool APlayerFFCS::CheckCollisionBeforeTeleport(const AActor* Enemy, FHitResult& OutHit)
+bool APlayerFFCS::CheckCollisionBeforeTeleport(const AActor* Enemy, FHitResult& OutHit) const
 {
 	if (!IsValid(GetWorld()) || !IsValid(GetWorld()->GetFirstPlayerController()))
 		return false;
@@ -163,7 +163,7 @@ bool APlayerFFCS::CheckCollisionBeforeTeleport(const AActor* Enemy, FHitResult& 
 	return IsHit;
 }
 
-AActor* APlayerFFCS::FindBestEnemyTest(TArray<AActor*> Enemies)
+AActor* APlayerFFCS::FindBestEnemy(TArray<AActor*> Enemies) const
 {
 	float DotProduct = -1.f;
 	AActor* BestEnemy = nullptr;
