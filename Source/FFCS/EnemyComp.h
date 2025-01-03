@@ -24,6 +24,18 @@ public:
 	// Called every frame
 	//virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	enum EHitDirection
+	{
+		Forward,
+		Right,
+		Backward,
+		Left,
+		Error
+	};
+
+	EHitDirection GetHitDirection(const AActor* Instigator) const;
+	void ControlEnemyLogic(const bool Stop, FTimerHandle BTTimerHandle);
+
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 	bool Targetable = true;
 };

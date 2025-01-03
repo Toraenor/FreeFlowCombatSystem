@@ -17,6 +17,6 @@ class FFCS_API AEnemyBase : public ACharacterBase
 public:
 	AEnemyBase();
 
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<class UEnemyComp> EnemyComp;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	bool Targetable = true;
 };

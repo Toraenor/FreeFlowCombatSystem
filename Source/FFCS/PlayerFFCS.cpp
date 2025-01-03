@@ -4,6 +4,7 @@
 #include "PlayerFFCS.h"
 
 #include "DebugMode.h"
+#include "EnemyBase.h"
 #include "EnemyComp.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -170,8 +171,7 @@ AActor* APlayerFFCS::FindBestEnemyTest(TArray<AActor*> Enemies)
 	for (const auto Enemy : Enemies)
 	{
 		FHitResult HitResult;
-		if (const UEnemyComp* EnemyComp = Enemy->GetComponentByClass<UEnemyComp>();
-			!EnemyComp || !EnemyComp->Targetable)
+		if (const AEnemyBase* EnemyBase = Cast<AEnemyBase>(Enemy); !EnemyBase->Targetable)
 			continue;
 
 		const bool IsHit = CheckCollisionBeforeTeleport(Enemy, HitResult);
