@@ -5,7 +5,6 @@
 
 #include "DebugMode.h"
 #include "EnemyBase.h"
-#include "EnemyComp.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -167,32 +166,32 @@ AActor* APlayerFFCS::FindBestEnemy(TArray<AActor*> Enemies) const
 {
 	float DotProduct = -1.f;
 	AActor* BestEnemy = nullptr;
-	
+
 	for (const auto Enemy : Enemies)
 	{
 		FHitResult HitResult;
-		if (const AEnemyBase* EnemyBase = Cast<AEnemyBase>(Enemy); !EnemyBase->Targetable)
+		if (const AEnemyBase* EnemyBase = Cast<AEnemyBase>(Enemy); !EnemyBase->GetIsTargetable())
 			continue;
 
 		const bool IsHit = CheckCollisionBeforeTeleport(Enemy, HitResult);
 		const float NewDotProduct = FindBestInputDotProductWithEnemy(Enemy);
 
 		//ensures that newDotProduct is greater than last one
-		if (NewDotProduct <= DotProduct)
+		if (NewDotProduct <= DotProduct || IsHit)
 			continue;
 
-		//ensures that if we have a hit it isn't the same enemy
-		if (const AActor* CurrentEnemy = FFCC->GetCurrentEnemy();
-			IsHit && CurrentEnemy != Enemy)
-		{
+		// //ensures that if we have a hit it isn't the same enemy
+		// if (const AActor* CurrentEnemy = FFCC->GetCurrentEnemy();
+		// 	IsHit && CurrentEnemy != Enemy)
+		// {
+		// 	BestEnemy = Enemy;
+		// 	DotProduct = NewDotProduct;
+		// }
+		// else
+		// {
 			BestEnemy = Enemy;
 			DotProduct = NewDotProduct;
-		}
-		else
-		{
-			BestEnemy = Enemy;
-			DotProduct = NewDotProduct;
-		}
+		//}
 	}
 
 	return BestEnemy;

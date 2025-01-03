@@ -9,6 +9,15 @@
 /**
  * 
  */
+UENUM(BlueprintType)
+enum EHitDirection : uint8
+{
+	Fwd,
+	Right,
+	Backward,
+	Left
+};
+
 UCLASS()
 class FFCS_API AEnemyBase : public ACharacterBase
 {
@@ -17,6 +26,12 @@ class FFCS_API AEnemyBase : public ACharacterBase
 public:
 	AEnemyBase();
 
+	UFUNCTION(BlueprintCallable)
+	void ApplyDamages(const float Damage, const EHitDirection HitDirection);
+	void Death(const EHitDirection HitDirection);
+	bool GetIsTargetable() const;
+
+protected:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 	bool Targetable = true;
 };
