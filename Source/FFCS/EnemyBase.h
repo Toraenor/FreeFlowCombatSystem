@@ -18,6 +18,17 @@ enum EHitDirection : uint8
 	Left
 };
 
+UENUM(BlueprintType)
+enum EAIStates : uint8
+{
+	GetInRange,
+	GetBack,
+	Wait,
+	LookForWeapons,
+	Strafe,
+	Attack
+};
+
 UCLASS()
 class FFCS_API AEnemyBase : public ACharacterBase
 {
