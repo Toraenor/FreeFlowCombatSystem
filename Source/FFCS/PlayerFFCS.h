@@ -36,9 +36,6 @@ public:
 	TObjectPtr<class UCameraComponent> CameraComp;
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class USpringArmComponent> SpringArm;
-	UPROPERTY(EditDefaultsOnly)
-	// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
-	TObjectPtr<class UFreeFlowCombatComponent> FFCC;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
 	TObjectPtr<class UInputAction> IA_Move;

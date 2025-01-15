@@ -3,6 +3,8 @@
 
 #include "CharacterBase.h"
 
+#include "Components/CapsuleComponent.h"
+
 // Sets default values
 ACharacterBase::ACharacterBase()
 {
@@ -11,24 +13,35 @@ ACharacterBase::ACharacterBase()
 	CurrentHealth = MaxHealth;
 }
 
-// Called when the game starts or when spawned
-void ACharacterBase::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void ACharacterBase::Tick(const float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
 // Called to bind functionality to input
 void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
 
+void ACharacterBase::ApplyDamages(const float Damage, const EHitDirection HitDirection)
+{
+	CurrentHealth -= Damage;
+	if (GEngine)
+	{
+		const FString ToDisplay = GetName() + " CurrentHealth: " + FString::SanitizeFloat(CurrentHealth);
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, ToDisplay);
+	}
+	
+	if (CurrentHealth <= 0)
+	{
+		Death(HitDirection);
+	}
+}
+
+void ACharacterBase::Death(const EHitDirection HitDirection)
+{
+	if (!GetCharacterMovement() || !GetMesh() || !GetCapsuleComponent())
+		return;
+	
+	//GetCharacterMovement()->SetMovementMode(MOVE_None);
+	GetMesh()->SetSimulatePhysics(true);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
 }
 

@@ -25,7 +25,6 @@ APlayerFFCS::APlayerFFCS()
 	SpringArm->TargetArmLength = 500.f;
 	SpringArm->SetRelativeLocationAndRotation(FVector(0.f, 0.f, 70.f), FRotator(0.f, -17.f, 0.f));
 	SpringArm->bUsePawnControlRotation = true;
-	FFCC = CreateDefaultSubobject<UFreeFlowCombatComponent>(TEXT("FFCC"));
 }
 
 float APlayerFFCS::GetMouseDotProduct(const AActor* Enemy) const

@@ -9,14 +9,6 @@
 /**
  * 
  */
-UENUM(BlueprintType)
-enum EHitDirection : uint8
-{
-	Fwd,
-	Right,
-	Backward,
-	Left
-};
 
 UENUM(BlueprintType)
 enum EAIStates : uint8
@@ -36,10 +28,8 @@ class FFCS_API AEnemyBase : public ACharacterBase
 
 public:
 	AEnemyBase();
-
-	UFUNCTION(BlueprintCallable)
-	void ApplyDamages(const float Damage, const EHitDirection HitDirection);
-	void Death(const EHitDirection HitDirection);
+	
+	virtual void Death(const EHitDirection HitDirection) override;
 	bool GetIsTargetable() const;
 
 protected:
