@@ -39,7 +39,7 @@ void ACharacterBase::Death(const EHitDirection HitDirection)
 	if (!GetCharacterMovement() || !GetMesh() || !GetCapsuleComponent())
 		return;
 	
-	//GetCharacterMovement()->SetMovementMode(MOVE_None);
+
 	GetMesh()->SetSimulatePhysics(true);
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);

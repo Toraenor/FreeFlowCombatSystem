@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CharacterBase.h"
+#include "GameplayTagContainer.h"
 #include "Components/ActorComponent.h"
 #include "FreeFlowCombatComponent.generated.h"
 
@@ -19,5 +20,14 @@ public:
 	EHitDirection HitDirection(AActor* Instigator);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void PlayHitMontage(EHitDirection HitDirection);
+	void SetCurrentEnemy(AActor* Enemy);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, BlueprintPure)
+	AActor* GetCurrentEnemy() const;
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void SetTagToPlayer(const FGameplayTag& Tag);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, BlueprintPure)
+	FGameplayTag GetTag() const;
 };

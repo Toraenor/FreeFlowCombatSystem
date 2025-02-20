@@ -54,9 +54,9 @@ void UAnimNotifyStateAIAttackCollision::DoCollisionCheck(const USkeletalMeshComp
 		// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
 		if (UFreeFlowCombatComponent* FFCC = HitActor->GetComponentByClass<UFreeFlowCombatComponent>())
 		{
-			const FString HitActorName = HitActor->GetName();
-			if (GEngine)
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Hit Actor : %s"), *HitActorName));
+			// const FString HitActorName = HitActor->GetName();
+			// if (GEngine)
+			// 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Hit Actor : %s"), *HitActorName));
 			UGameplayStatics::ApplyDamage(HitActor, Damage, nullptr, MeshComp->GetOwner(), UDamageType::StaticClass());
 		}
 	}

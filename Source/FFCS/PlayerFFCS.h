@@ -24,6 +24,8 @@ public:
 	FVector GetEnemyToPlayerVec(const AActor* Enemy) const;
 	FVector GetPlayerToEnemyVec(const AActor* Enemy) const;
 	bool CheckCollisionBeforeTeleport(const AActor* Enemy, FHitResult& OutHit) const;
+	virtual void Death(const EHitDirection HitDirection) override;
+	void ReloadGame() const;
 	
 	UFUNCTION(BlueprintCallable)
 	AActor* FindBestEnemy(TArray<AActor*> Enemies) const;

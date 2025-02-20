@@ -12,6 +12,7 @@
 #include "Engine/LocalPlayer.h"
 #include "EnhancedInputSubsystems.h"
 #include "FreeFlowCombatComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // ReSharper disable once CppUE4CodingStandardNamingViolationWarning
 #define ECC_FreeFlow ECollisionChannel::ECC_GameTraceChannel1
@@ -159,6 +160,26 @@ bool APlayerFFCS::CheckCollisionBeforeTeleport(const AActor* Enemy, FHitResult& 
 	}
 
 	return IsHit;
+}
+
+void APlayerFFCS::Death(const EHitDirection HitDirection)
+{
+	Super::Death(HitDirection);
+
+	if (!GetWorld())
+		return;
+	
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.2f);
+	FTimerHandle UnusedTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(UnusedTimerHandle, this, &APlayerFFCS::ReloadGame, 1.f);
+}
+
+void APlayerFFCS::ReloadGame() const
+{
+	if (!GetWorld())
+		return;
+	
+	UGameplayStatics::OpenLevel(GetWorld(), FName(UGameplayStatics::GetCurrentLevelName(GetWorld())));
 }
 
 AActor* APlayerFFCS::FindBestEnemy(TArray<AActor*> Enemies) const
