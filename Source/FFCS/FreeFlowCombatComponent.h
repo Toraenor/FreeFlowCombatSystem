@@ -26,7 +26,13 @@ public:
 	AActor* GetCurrentEnemy() const;
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetTagToPlayer(const FGameplayTag& Tag);
+	void SetCounterEnemy(AActor* Enemy);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, BlueprintPure)
+	AActor* GetCounterEnemy() const;
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void SetTagToPlayer(FGameplayTag Tag);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, BlueprintPure)
 	FGameplayTag GetTag() const;

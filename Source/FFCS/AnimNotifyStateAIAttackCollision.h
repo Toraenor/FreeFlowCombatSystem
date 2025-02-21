@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Animation/AnimNotifies/AnimNotifyState.h"
 #include "AnimNotifyStateAIAttackCollision.generated.h"
 
@@ -14,6 +15,8 @@ class FFCS_API UAnimNotifyStateAIAttackCollision : public UAnimNotifyState
 {
 	GENERATED_BODY()
 public:
+	UAnimNotifyStateAIAttackCollision();
+	
 	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference) override;
 	virtual void NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference) override;
 
@@ -28,6 +31,8 @@ public:
 	FName StartSocket;
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category="Settings")
 	FName EndSocket;
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category="Settings")
+	FGameplayTag CounterTag;
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category="Settings")
 	float Damage = 1.f;
 

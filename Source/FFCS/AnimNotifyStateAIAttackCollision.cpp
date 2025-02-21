@@ -7,6 +7,11 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
+UAnimNotifyStateAIAttackCollision::UAnimNotifyStateAIAttackCollision()
+{
+	CounterTag = FGameplayTag::RequestGameplayTag(FName("PlayerStates.Counter"));
+}
+
 void UAnimNotifyStateAIAttackCollision::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration,
                                                     const FAnimNotifyEventReference& EventReference)
 {
@@ -52,7 +57,8 @@ void UAnimNotifyStateAIAttackCollision::DoCollisionCheck(const USkeletalMeshComp
 			return;
 		
 		// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
-		if (UFreeFlowCombatComponent* FFCC = HitActor->GetComponentByClass<UFreeFlowCombatComponent>())
+		const UFreeFlowCombatComponent* FFCC = HitActor->GetComponentByClass<UFreeFlowCombatComponent>(); 
+		if (IsValid(FFCC) && FFCC->GetTag() != CounterTag)
 		{
 			// const FString HitActorName = HitActor->GetName();
 			// if (GEngine)
