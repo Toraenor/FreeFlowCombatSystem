@@ -29,6 +29,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual void ApplyDamages(const float Damage, const EHitDirection HitDirection);
+	UFUNCTION(BlueprintCallable)
 	virtual void Death(const EHitDirection HitDirection);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="HealthSystem")

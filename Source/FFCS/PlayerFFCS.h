@@ -36,7 +36,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UCameraComponent> CameraComp;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<class USpringArmComponent> SpringArm;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
