@@ -36,4 +36,7 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, BlueprintPure)
 	FGameplayTag GetTag() const;
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="Counter")
+	void PlayCounterMontage();
 };
