@@ -16,10 +16,14 @@ class FFCS_API UAnimNotifyStateFightTrail : public UAnimNotifyState
 public:
 	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference) override;
 	virtual void NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference) override;
+	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
 
 	// Niagara System to spawn
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Trail Effect")
 	class UNiagaraSystem* TrailEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Impact Effect")
+	class UParticleSystem* ImpactEffect;
 
 	UPROPERTY(EditAnywhere, Category = "Trail Settings")
 	FBoneSocketTarget StartTarget;
