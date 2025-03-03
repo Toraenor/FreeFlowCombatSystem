@@ -27,16 +27,18 @@ public:
 	bool DoAttackOnce;
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category="Settings")
 	float Radius;
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category="Settings")
-	FName StartSocket;
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category="Settings")
-	FName EndSocket;
+	UPROPERTY(EditInstanceOnly, Category="Settings")
+	FBoneSocketTarget StartTarget;
+	UPROPERTY(EditInstanceOnly, Category="Settings")
+	FBoneSocketTarget EndTarget;
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category="Settings")
 	FGameplayTag CounterTag;
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category="Settings")
 	float Damage = 1.f;
 
 private:
+	void GetSocketOrBoneLocations(const USkeletalMeshComponent* MeshComp, FVector& StartLocation, FVector& EndLocation) const;
+	
 	UPROPERTY()
 	bool AttackOnceTrigger = false;
 

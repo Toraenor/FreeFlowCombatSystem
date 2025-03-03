@@ -41,8 +41,9 @@ void UAnimNotifyStateAIAttackCollision::NotifyTick(USkeletalMeshComponent* MeshC
 void UAnimNotifyStateAIAttackCollision::DoCollisionCheck(const USkeletalMeshComponent* MeshComp) const
 {
 	FHitResult Result;
-	const FVector InSocket = MeshComp->GetSocketLocation(StartSocket);
-	const FVector OutSocket = MeshComp->GetSocketLocation(EndSocket);
+	FVector InSocket;
+	FVector OutSocket;
+	GetSocketOrBoneLocations(MeshComp, InSocket, OutSocket);
 	const ETraceTypeQuery TraceChannel = UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel1);
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(MeshComp->GetOwner());
@@ -65,5 +66,26 @@ void UAnimNotifyStateAIAttackCollision::DoCollisionCheck(const USkeletalMeshComp
 			// 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Hit Actor : %s"), *HitActorName));
 			UGameplayStatics::ApplyDamage(HitActor, Damage, nullptr, MeshComp->GetOwner(), UDamageType::StaticClass());
 		}
+	}
+}
+
+void UAnimNotifyStateAIAttackCollision::GetSocketOrBoneLocations(const USkeletalMeshComponent* MeshComp, FVector& StartLocation, FVector& EndLocation) const
+{
+	if (StartTarget.bUseSocket)
+	{
+		StartLocation = MeshComp->GetSocketLocation(StartTarget.SocketReference.SocketName);
+	}
+	else
+	{
+		StartLocation = MeshComp->GetSocketLocation(StartTarget.BoneReference.BoneName);
+	}
+
+	if (EndTarget.bUseSocket)
+	{
+		EndLocation = MeshComp->GetSocketLocation(EndTarget.SocketReference.SocketName);
+	}
+	else
+	{
+		EndLocation = MeshComp->GetSocketLocation(EndTarget.BoneReference.BoneName);
 	}
 }
