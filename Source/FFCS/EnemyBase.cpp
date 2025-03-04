@@ -14,6 +14,18 @@ AEnemyBase::AEnemyBase()
 void AEnemyBase::Death(const EHitDirection HitDirection)
 {
 	Super::Death(HitDirection);
+	if (!IsValid(GetWorld()) || !IsValid(GetWorld()->GetFirstPlayerController()) || !IsValid(GetWorld()->GetFirstPlayerController()->GetPawn()))
+		return;
+
+	if (UAIDirector* AIDirector = GetWorld()->GetFirstPlayerController()->GetPawn()->GetComponentByClass<UAIDirector>())
+	{
+		AIDirector->RemoveEnemy(this);
+	}
+
+	if (GetController())
+	{
+		GetController()->Destroy();
+	}
 	Targetable = false;
 	PrimaryActorTick.bCanEverTick = false;
 
@@ -26,13 +38,6 @@ void AEnemyBase::Death(const EHitDirection HitDirection)
 		{
 			Component->SetActive(false);
 		}
-	}
-
-	GetController()->Destroy();
-
-	if (UAIDirector* AIDirector = GetWorld()->GetFirstPlayerController()->GetPawn()->GetComponentByClass<UAIDirector>())
-	{
-		AIDirector->RemoveEnemy(this);
 	}
 }
 
