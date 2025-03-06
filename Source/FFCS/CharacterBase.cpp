@@ -22,11 +22,6 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 void ACharacterBase::ApplyDamages(const float Damage, const EHitDirection HitDirection)
 {
 	CurrentHealth -= Damage;
-	// if (GEngine)
-	// {
-	// 	const FString ToDisplay = GetName() + " CurrentHealth: " + FString::SanitizeFloat(CurrentHealth);
-	// 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, ToDisplay);
-	// }
 	
 	if (CurrentHealth <= 0)
 	{

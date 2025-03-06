@@ -3,6 +3,7 @@
 
 #include "AnimNotifyStateAIAttackCollision.h"
 
+#include "DebugMode.h"
 #include "FreeFlowCombatComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -48,7 +49,14 @@ void UAnimNotifyStateAIAttackCollision::DoCollisionCheck(const USkeletalMeshComp
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(MeshComp->GetOwner());
 
-	const EDrawDebugTrace::Type DebugTrace = Debug ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None;
+	bool DrawDebugByKey = false;
+
+	if (GetWorld() && GetWorld()->GetFirstPlayerController() && GetWorld()->GetFirstPlayerController()->Implements<UDebugMode>())
+	{
+		DrawDebugByKey = IDebugMode::Execute_GetDebugMode(GetWorld()->GetFirstPlayerController());
+	}
+	
+	const EDrawDebugTrace::Type DebugTrace = Debug || DrawDebugByKey ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None;
 	const bool bHit = UKismetSystemLibrary::SphereTraceSingle(MeshComp->GetOwner()->GetWorld(), InSocket, OutSocket, Radius, TraceChannel, true, ActorsToIgnore,
 	                                                   DebugTrace, Result, true);
 	if (bHit)
@@ -61,9 +69,6 @@ void UAnimNotifyStateAIAttackCollision::DoCollisionCheck(const USkeletalMeshComp
 		const UFreeFlowCombatComponent* FFCC = HitActor->GetComponentByClass<UFreeFlowCombatComponent>(); 
 		if (IsValid(FFCC) && FFCC->GetTag() != CounterTag)
 		{
-			// const FString HitActorName = HitActor->GetName();
-			// if (GEngine)
-			// 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Hit Actor : %s"), *HitActorName));
 			UGameplayStatics::ApplyDamage(HitActor, Damage, nullptr, MeshComp->GetOwner(), UDamageType::StaticClass());
 		}
 	}

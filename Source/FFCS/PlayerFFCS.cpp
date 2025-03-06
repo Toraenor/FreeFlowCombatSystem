@@ -11,7 +11,6 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/LocalPlayer.h"
 #include "EnhancedInputSubsystems.h"
-#include "FreeFlowCombatComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 // ReSharper disable once CppUE4CodingStandardNamingViolationWarning
