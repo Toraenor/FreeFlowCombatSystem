@@ -25,4 +25,6 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, BlueprintPure)
 	bool GetAttackPlayer() const;
+
+	bool AlreadyAttacked = false;
 };

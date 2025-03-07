@@ -4,6 +4,7 @@
 #include "AnimNotifyStateAIAttackCollision.h"
 
 #include "DebugMode.h"
+#include "EnemyComponent.h"
 #include "FreeFlowCombatComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -13,7 +14,8 @@ UAnimNotifyStateAIAttackCollision::UAnimNotifyStateAIAttackCollision()
 	CounterTag = FGameplayTag::RequestGameplayTag(FName("PlayerStates.Counter"));
 }
 
-void UAnimNotifyStateAIAttackCollision::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration,
+void UAnimNotifyStateAIAttackCollision::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
+                                                    float TotalDuration,
                                                     const FAnimNotifyEventReference& EventReference)
 {
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
@@ -21,26 +23,32 @@ void UAnimNotifyStateAIAttackCollision::NotifyBegin(USkeletalMeshComponent* Mesh
 	AttackOnceTrigger = DoAttackOnce;
 }
 
-void UAnimNotifyStateAIAttackCollision::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime,
+void UAnimNotifyStateAIAttackCollision::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
+                                                   float FrameDeltaTime,
                                                    const FAnimNotifyEventReference& EventReference)
 {
 	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime, EventReference);
+	DoCollisionCheck(MeshComp);
+}
 
-	if (AttackOnceTrigger)
+void UAnimNotifyStateAIAttackCollision::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
+	const FAnimNotifyEventReference& EventReference)
+{
+	Super::NotifyEnd(MeshComp, Animation, EventReference);
+	if (UEnemyComponent* EnemyComponent = MeshComp->GetOwner()->GetComponentByClass<UEnemyComponent>())
 	{
-		//if attack should be done only once, use the private variable that gets reset at begin notify to check
-		DoCollisionCheck(MeshComp);
-		AttackOnceTrigger = false;
-	}
-	else if (!DoAttackOnce)
-	{
-		//if attack can be triggered multiple times, then use the exposed variable since the private gets set to false when it is true, that means it will continue to run the multiple hits logic after attacking once
-		DoCollisionCheck(MeshComp);
+		EnemyComponent->AlreadyAttacked = false;
 	}
 }
 
 void UAnimNotifyStateAIAttackCollision::DoCollisionCheck(const USkeletalMeshComponent* MeshComp) const
 {
+	if (!MeshComp->GetOwner())
+		return;
+	UEnemyComponent* EnemyComponent = MeshComp->GetOwner()->GetComponentByClass<UEnemyComponent>();
+	if (!EnemyComponent || (AttackOnceTrigger && EnemyComponent->AlreadyAttacked))
+		return;
+
 	FHitResult Result;
 	FVector InSocket;
 	FVector OutSocket;
@@ -51,30 +59,36 @@ void UAnimNotifyStateAIAttackCollision::DoCollisionCheck(const USkeletalMeshComp
 
 	bool DrawDebugByKey = false;
 
-	if (GetWorld() && GetWorld()->GetFirstPlayerController() && GetWorld()->GetFirstPlayerController()->Implements<UDebugMode>())
+	if (GetWorld() && GetWorld()->GetFirstPlayerController() && GetWorld()->GetFirstPlayerController()->Implements<
+		UDebugMode>())
 	{
 		DrawDebugByKey = IDebugMode::Execute_GetDebugMode(GetWorld()->GetFirstPlayerController());
 	}
-	
-	const EDrawDebugTrace::Type DebugTrace = Debug || DrawDebugByKey ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None;
-	const bool bHit = UKismetSystemLibrary::SphereTraceSingle(MeshComp->GetOwner()->GetWorld(), InSocket, OutSocket, Radius, TraceChannel, true, ActorsToIgnore,
-	                                                   DebugTrace, Result, true);
+
+	const EDrawDebugTrace::Type DebugTrace = Debug || DrawDebugByKey
+		                                         ? EDrawDebugTrace::ForDuration
+		                                         : EDrawDebugTrace::None;
+	const bool bHit = UKismetSystemLibrary::SphereTraceSingle(MeshComp->GetOwner()->GetWorld(), InSocket, OutSocket,
+	                                                          Radius, TraceChannel, true, ActorsToIgnore,
+	                                                          DebugTrace, Result, true);
 	if (bHit)
 	{
 		AActor* HitActor = Result.GetActor();
 		if (!IsValid(HitActor))
 			return;
-		
+
 		// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
-		const UFreeFlowCombatComponent* FFCC = HitActor->GetComponentByClass<UFreeFlowCombatComponent>(); 
+		const UFreeFlowCombatComponent* FFCC = HitActor->GetComponentByClass<UFreeFlowCombatComponent>();
 		if (IsValid(FFCC) && FFCC->GetTag() != CounterTag)
 		{
 			UGameplayStatics::ApplyDamage(HitActor, Damage, nullptr, MeshComp->GetOwner(), UDamageType::StaticClass());
+			EnemyComponent->AlreadyAttacked = true;
 		}
 	}
 }
 
-void UAnimNotifyStateAIAttackCollision::GetSocketOrBoneLocations(const USkeletalMeshComponent* MeshComp, FVector& StartLocation, FVector& EndLocation) const
+void UAnimNotifyStateAIAttackCollision::GetSocketOrBoneLocations(const USkeletalMeshComponent* MeshComp,
+                                                                 FVector& StartLocation, FVector& EndLocation) const
 {
 	if (StartTarget.bUseSocket)
 	{
