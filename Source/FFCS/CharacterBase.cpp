@@ -38,5 +38,6 @@ void ACharacterBase::Death(const EHitDirection HitDirection)
 	GetMesh()->SetSimulatePhysics(true);
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
+	GetMesh()->AddImpulse(FVector(0, 0, 500));
 }
 
