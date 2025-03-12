@@ -24,6 +24,8 @@ public:
 	// Sets default values for this character's properties
 	ACharacterBase();
 
+	virtual void BeginPlay() override;
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -32,8 +34,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void Death(const EHitDirection HitDirection);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="HealthSystem")
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, Category="HealthSystem")
 	float CurrentHealth = 0;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="HealthSystem")
-	float MaxHealth = 3;
+	float MaxHealth = 10;
 };

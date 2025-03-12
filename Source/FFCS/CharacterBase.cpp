@@ -13,6 +13,12 @@ ACharacterBase::ACharacterBase()
 	CurrentHealth = MaxHealth;
 }
 
+void ACharacterBase::BeginPlay()
+{
+	Super::BeginPlay();
+	CurrentHealth = MaxHealth;
+}
+
 // Called to bind functionality to input
 void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
