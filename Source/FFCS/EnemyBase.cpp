@@ -17,6 +17,8 @@ void AEnemyBase::Death(const EHitDirection HitDirection)
 	if (!IsValid(GetWorld()) || !IsValid(GetWorld()->GetFirstPlayerController()) || !IsValid(GetWorld()->GetFirstPlayerController()->GetPawn()))
 		return;
 
+	GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
+
 	if (UAIDirector* AIDirector = GetWorld()->GetFirstPlayerController()->GetPawn()->GetComponentByClass<UAIDirector>())
 	{
 		AIDirector->RemoveEnemy(this);
@@ -36,7 +38,7 @@ void AEnemyBase::Death(const EHitDirection HitDirection)
 	{
 		if (Component && !Component->IsA(USkeletalMeshComponent::StaticClass()) && !Component->IsA(UCapsuleComponent::StaticClass()))
 		{
-			Component->SetActive(false);
+			Component->DestroyComponent();
 		}
 	}
 }
